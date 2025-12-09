@@ -1,0 +1,48 @@
+/* Review status badge in PR list */
+.rgh-pr-review-status {
+	display: inline-flex;
+	margin-left: 8px;
+	align-items: center;
+	padding: 2px 4px;
+	border-radius: 4px;
+	border: 1.5px solid;
+}
+
+.rgh-review-status-approved {
+	color: var(--color-success-fg, var(--color-fg-success, #1a7f37));
+	border-color: var(--color-success-fg, var(--color-fg-success, #1a7f37));
+}
+
+.rgh-review-status-changes {
+	color: var(--color-danger-fg, var(--color-fg-danger, #cf222e));
+	border-color: var(--color-danger-fg, var(--color-fg-danger, #cf222e));
+}
+
+.rgh-review-status-commented {
+	color: var(--color-accent-fg, var(--color-fg-accent, #0969da));
+	border-color: var(--color-accent-fg, var(--color-fg-accent, #0969da));
+}
+
+/* Indicator for new commits after review */
+.rgh-review-status-indicator {
+	display: inline-block;
+	width: 6px;
+	height: 6px;
+	margin-left: 4px;
+	border-radius: 50%;
+	background-color: var(--color-attention-fg, var(--color-fg-attention, #bf8700));
+	vertical-align: middle;
+}
+
+.rgh-review-status-updated {
+	position: relative;
+}
+
+/*
+Test URLs:
+https://github.com/pulls
+https://github.com/refined-github/refined-github/pulls
+https://github.com/refined-github/sandbox/pulls
+*/
+
+
