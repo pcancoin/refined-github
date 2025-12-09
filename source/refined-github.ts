@@ -200,6 +200,7 @@ import './features/prevent-comment-loss.js';
 import './features/fix-no-pr-search.js';
 import './features/clean-readme-url.js';
 import './features/pr-notification-link.js';
+import './features/pr-review-status.js';
 import './features/click-outside-modal.js';
 import './features/hidden-content.js';
 import './features/linkify-line-numbers.js';
