@@ -23,6 +23,16 @@
 	border-color: var(--color-accent-fg, var(--color-fg-accent, #0969da));
 }
 
+.rgh-review-status-needed {
+	color: var(--color-attention-fg, var(--color-fg-attention, #bf8700));
+	border-color: var(--color-attention-fg, var(--color-fg-attention, #bf8700));
+}
+
+.rgh-review-status-to-merge {
+	color: var(--color-done-fg, var(--color-fg-done, #8250df));
+	border-color: var(--color-done-fg, var(--color-fg-done, #8250df));
+}
+
 /* Indicator for new commits after review */
 .rgh-review-status-indicator {
 	display: inline-block;
