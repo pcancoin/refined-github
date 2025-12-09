@@ -5,6 +5,8 @@ import * as pageDetect from 'github-url-detection';
 import CheckIcon from 'octicons-plain-react/Check';
 import XIcon from 'octicons-plain-react/X';
 import CommentIcon from 'octicons-plain-react/Comment';
+import EyeIcon from 'octicons-plain-react/Eye';
+import GitMergeIcon from 'octicons-plain-react/GitMerge';
 import batchedFunction from 'batched-function';
 
 import features from '../feature-manager.js';
@@ -12,6 +14,7 @@ import api from '../github-helpers/api.js';
 import observe from '../helpers/selector-observer.js';
 import {openPrsListLink} from '../github-helpers/selectors.js';
 import {expectToken} from '../github-helpers/github-token.js';
+import {getLoggedInUser} from '../github-helpers/index.js';
 
 type ReviewState = 'APPROVED' | 'CHANGES_REQUESTED' | 'COMMENTED' | 'DISMISSED' | 'PENDING' | undefined;
 
@@ -89,6 +92,16 @@ async function addReviewStatus(links: HTMLAnchorElement[]): Promise<void> {
 		${key}: repository(owner: "${owner}", name: "${name}") {
 			pullRequest(number: ${number}) {
 				headRefOid
+				isDraft
+				title
+				author {
+					login
+				}
+				reviews(states: APPROVED, first: 10) {
+					nodes {
+						state
+					}
+				}
 				viewerLatestReview {
 					state
 					commit {
@@ -108,19 +121,60 @@ async function addReviewStatus(links: HTMLAnchorElement[]): Promise<void> {
 		}
 
 		const reviewState: ReviewState = prData.viewerLatestReview?.state;
-
-		// Don't show anything if there's no review or if it's dismissed
-		if (!reviewState || reviewState === 'DISMISSED' || reviewState === 'PENDING') {
-			continue;
-		}
+		const {isDraft, title, author, reviews, viewerLatestReview, headRefOid} = prData;
 
 		// Check if badge already exists
 		if (pr.link.nextElementSibling?.classList.contains('rgh-pr-review-status')) {
 			continue;
 		}
 
+		const loggedInUser = getLoggedInUser();
+		const isMyPr = author?.login === loggedInUser;
+
+		// Check if PR is ready to merge (my PR with at least 2 approvals)
+		if (isMyPr && reviews?.nodes && !isDraft) {
+			const approvalCount = reviews.nodes.filter((review: {state: string}) => review.state === 'APPROVED').length;
+			if (approvalCount >= 2) {
+				pr.link.after(
+					<span
+						className="rgh-pr-review-status tooltipped tooltipped-n rgh-review-status-to-merge"
+						aria-label={`Ready to merge (${approvalCount} approvals)`}
+					>
+						<GitMergeIcon className="v-align-middle" />
+					</span>,
+				);
+				continue;
+			}
+		}
+
+		// Skip if this is your own PR (already handled above)
+		if (isMyPr) {
+			continue;
+		}
+
+		// Check if review is needed (no review, not draft, title doesn't contain WIP)
+		const titleContainsWip = title.toLowerCase().includes('wip');
+		const needsReview = !reviewState && !isDraft && !titleContainsWip;
+
+		// Show review needed icon
+		if (needsReview) {
+			pr.link.after(
+				<span
+					className="rgh-pr-review-status tooltipped tooltipped-n rgh-review-status-needed"
+					aria-label="Review needed"
+				>
+					<EyeIcon className="v-align-middle" />
+				</span>,
+			);
+			continue;
+		}
+
+		// Don't show anything if there's no review or if it's dismissed
+		if (!reviewState || reviewState === 'DISMISSED' || reviewState === 'PENDING') {
+			continue;
+		}
+
 		// Check if there are new commits after the review
-		const {viewerLatestReview, headRefOid} = prData;
 		const reviewCommitOid = viewerLatestReview?.commit?.oid;
 		const hasNewCommits = reviewCommitOid && headRefOid && reviewCommitOid !== headRefOid;
 
