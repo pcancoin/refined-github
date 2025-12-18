@@ -24,14 +24,37 @@
 }
 
 .rgh-review-status-needed {
-	color: var(--color-attention-fg, var(--color-fg-attention, #bf8700));
-	border-color: var(--color-attention-fg, var(--color-fg-attention, #bf8700));
+	color: var(--color-accent-fg, var(--color-fg-accent, #0969da));
+	border-color: var(--color-accent-fg, var(--color-fg-accent, #0969da));
 }
 
 .rgh-review-status-to-merge {
+	--angle: 0deg;
 	color: var(--color-done-fg, var(--color-fg-done, #8250df));
-	border-color: var(--color-done-fg, var(--color-fg-done, #8250df));
+	/* border-color: var(--color-done-fg, var(--color-fg-done, #8250df)); */
+
+	border: double 1.5px transparent;
+	border-radius: 4px;
+	border-image: conic-gradient(from var(--angle), red, yellow, lime, aqua, blue, magenta, red) 1;
+	
+	background-origin: border-box;
+	background-clip: content-box, border-box;
+
+	animation: 10s rotate linear infinite;
 }
+
+@keyframes rotate {
+	to {
+		--angle: 360deg;
+	}
+}
+
+@property --angle {
+	syntax: '<angle>';
+	initial-value: 0deg;
+	inherits: false;
+}
+
 
 /* Indicator for new commits after review */
 .rgh-review-status-indicator {
@@ -44,8 +67,19 @@
 	vertical-align: middle;
 }
 
+.rgh-review-status-feedback {
+	color: var(--color-accent-fg, var(--color-fg-accent, #0969da));
+	border-color: var(--color-accent-fg, var(--color-fg-accent, #0969da));
+}
+
 .rgh-review-status-updated {
-	position: relative;
+	color: var(--color-accent-fg, var(--color-fg-accent, #0969da));
+	border-color: var(--color-accent-fg, var(--color-fg-accent, #0969da));
+}
+
+.rgh-review-status-reviewed {
+	color: var(--color-success-fg, var(--color-fg-success, #1a7f37));
+	border-color: var(--color-success-fg, var(--color-fg-success, #1a7f37));
 }
 
 /*
