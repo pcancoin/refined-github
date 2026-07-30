@@ -112,6 +112,7 @@
 	"pr-first-commit-title",
 	"pr-jump-to-first-non-viewed-file",
 	"pr-notification-link",
+	"pr-review-status",
 	"prevent-comment-loss",
 	"prevent-duplicate-pr-submission",
 	"prevent-link-loss",

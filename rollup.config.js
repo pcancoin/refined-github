@@ -116,8 +116,7 @@ const rollup = {
 		copy({
 			targets: [
 				{src: './source/manifest.json', dest: 'distribution'},
-				{src: './source/*.+(html|png|js)', dest: 'distribution/assets'},
-				{src: './source/features/merge-parrot.gif', dest: 'distribution/assets'},
+				{src: './source/*.+(html|png|js|gif)', dest: 'distribution/assets'},
 			],
 		}),
 		cleanup(),

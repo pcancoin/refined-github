@@ -36,6 +36,7 @@ const noScreenshotExceptions = new Set([
 	'hide-inactive-deployments', // TODO: side-by-side PNG
 	'esc-to-deselect-line', // TODO Add GIF with key overlay
 	'scrollable-areas', // TODO: Add side-by-side PNG
+	'pr-review-status',
 
 	// CSS-only features without screenshots yet
 	'reactions-popup',

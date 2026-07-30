@@ -13,7 +13,6 @@ import features from '../feature-manager.js';
 import api from '../github-helpers/api.js';
 import observe from '../helpers/selector-observer.js';
 import {openPrsListLink} from '../github-helpers/selectors.js';
-import {expectToken} from '../github-helpers/github-token.js';
 import {getLoggedInUser} from '../github-helpers/index.js';
 
 type ReviewState = 'APPROVED' | 'CHANGES_REQUESTED' | 'COMMENTED' | 'DISMISSED' | 'PENDING' | undefined;
@@ -321,7 +320,6 @@ function createReviewBadge(
 }
 
 async function init(signal: AbortSignal): Promise<void> {
-	await expectToken();
 	observe(openPrsListLink, batchedFunction(addReviewStatus, {delay: 100}), {signal});
 }
 
@@ -329,6 +327,7 @@ void features.add(import.meta.url, {
 	include: [
 		pageDetect.isIssueOrPRList,
 	],
+	requiresToken: true,
 	init,
 });
 
